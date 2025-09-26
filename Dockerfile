@@ -17,11 +17,15 @@ RUN --mount=type=cache,target=/gomod-cache \
 
 COPY ./syne ./syne
 RUN --mount=type=cache,target=/gomod-cache --mount=type=cache,target=/go-cache \
-  go build -C syne -o ../out/ .
+  go build -C syne -o ../out/ ./...
+RUN --mount=type=cache,target=/gomod-cache --mount=type=cache,target=/go-cache \
+  go test -C syne -c -o ../out/ ./...
 
 COPY ./mnemo ./mnemo
 RUN --mount=type=cache,target=/gomod-cache --mount=type=cache,target=/go-cache \
-  go build -C mnemo -o ../out/ .
+  go build -C mnemo -o ../out/ ./...
+RUN --mount=type=cache,target=/gomod-cache --mount=type=cache,target=/go-cache \
+  go test -C mnemo -c -o ../out/ ./...
 
 FROM alpine:edge AS runner
 WORKDIR /root
